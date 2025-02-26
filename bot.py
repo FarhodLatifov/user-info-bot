@@ -28,7 +28,8 @@ dp = Dispatcher()
 # --- Lifespan менеджер для FastAPI ---
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    asyncio.create_task(start_bot())
+    await bot.delete_webhook(drop_pending_updates=True)
+    asyncio.create_task(dp.start_polling(bot))
     yield
     await bot.session.close()
 
@@ -86,3 +87,4 @@ async def start_bot():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=PORT, reload=True)
+    app.include_router(dp.router)
