@@ -28,8 +28,7 @@ dp = Dispatcher()
 # --- Lifespan менеджер для FastAPI ---
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await bot.delete_webhook(drop_pending_updates=True)
-    asyncio.create_task(dp.start_polling(bot))
+    asyncio.create_task(dp.start_polling(bot))  # <-- Запускаем бота здесь
     yield
     await bot.session.close()
 
